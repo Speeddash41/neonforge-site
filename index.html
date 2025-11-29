@@ -17,268 +17,235 @@
     --maxw:1100px;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;margin:0;padding:0;}
   body{
-    margin:0;
-    background:
-      radial-gradient(1200px 500px at 10% 10%, rgba(108,122,255,0.06), transparent 10%),
-      radial-gradient(900px 400px at 90% 90%, rgba(34,211,238,0.04), transparent 10%),
-      var(--bg);
+    background:var(--bg);
     color:#e6eef8;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
+    font-family:inherit;
     line-height:1.4;
+    overflow-x:hidden;
+    position:relative;
   }
 
-  .wrap{max-width:var(--maxw);margin:32px auto;padding:20px}
+  canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
 
   /* Banner */
   .banner{
     position:relative;
     border-radius:18px;
     overflow:hidden;
-    min-height:220px;
-    background: linear-gradient(90deg, rgba(108,122,255,0.08), rgba(34,211,238,0.04));
+    min-height:260px;
+    background: linear-gradient(135deg, rgba(108,122,255,0.1), rgba(34,211,238,0.05));
     display:flex;
     align-items:center;
-    justify-content:flex-start;
+    justify-content:space-between;
     gap:24px;
-    padding:28px;
+    padding:32px;
+    margin-bottom:32px;
+    z-index:1;
   }
-  .banner::after{
+  .banner::before{
     content:"";
-    position:absolute;right:-120px;top:-40px;width:420px;height:420px;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.03), transparent 20%);
-    transform:rotate(12deg);
-    pointer-events:none;
+    position:absolute;
+    width:200%;height:200%;
+    top:-50%;left:-50%;
+    background:radial-gradient(circle, rgba(108,122,255,0.2) 0%, transparent 70%);
+    animation:rotate 30s linear infinite;
+    z-index:0;
   }
+  @keyframes rotate{
+    0%{transform:rotate(0deg);}
+    100%{transform:rotate(360deg);}
+  }
+
   .banner .title{
+    max-width:65%;
+    position:relative;
     z-index:2;
-    max-width:64%;
+    animation:fadeIn 1.2s ease forwards;
   }
   .banner h1{
-    margin:0;font-size:34px;letter-spacing:-0.6px;
+    font-size:36px;
+    margin-bottom:12px;
   }
   .banner p{
-    margin:10px 0 0;color:var(--muted);
+    color:var(--muted);
+    font-size:16px;
   }
-  .banner .hero-actions{ margin-top:12px; display:flex; gap:12px; align-items:center; }
-
+  .banner .hero-actions{ margin-top:16px; display:flex; gap:14px; }
   .btn{
     display:inline-flex;align-items:center;gap:10px;
     background:linear-gradient(90deg,var(--accent),#5461ff 60%);
-    color:white;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:600;
-    box-shadow: 0 8px 30px rgba(75,85,255,0.12);
-    transition:transform .12s ease, box-shadow .12s;
+    color:white;padding:12px 22px;border-radius:16px;text-decoration:none;font-weight:600;
+    box-shadow:0 10px 35px rgba(75,85,255,0.15);
+    transition:0.2s ease;
   }
+  .btn:hover{transform:translateY(-4px) scale(1.05); box-shadow:0 14px 45px rgba(75,85,255,0.25);}
   .btn.secondary{
-    background:transparent;border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:600;
-    box-shadow:none;padding:10px 14px;
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.08);
+    color:var(--muted);
+    box-shadow:none;
   }
-  .btn:hover{ transform:translateY(-3px) }
 
-  /* panel */
-  .panel{
-    display:grid;
-    grid-template-columns: 1fr 380px;
-    gap:22px;margin-top:22px;
-  }
-  @media (max-width:980px){ .panel{ grid-template-columns: 1fr; } .banner .title{ max-width:100% } }
-
+  /* Panel */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:24px;position:relative;z-index:1;}
+  .panel{display:grid; grid-template-columns:1fr 380px; gap:22px;}
+  @media (max-width:980px){.panel{grid-template-columns:1fr;} .banner .title{max-width:100%}}
   .card{
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:var(--radius); padding:18px; box-shadow: 0 6px 20px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
+    background: var(--card);
+    border-radius:var(--radius);
+    padding:20px;
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    opacity:0;transform:translateY(20px);
+    animation:fadeUp 0.8s ease forwards;
+  }
+  .card:nth-child(1){animation-delay:0.3s;}
+  .card:nth-child(2){animation-delay:0.5s;}
+  .card h3{font-size:20px;margin-bottom:8px;}
+  .card p{font-size:14px;color:var(--muted);}
+
+  @keyframes fadeUp{
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
   }
 
-  .card h3{ margin:0 0 8px 0; font-size:18px }
-  .card p{ margin:0;color:var(--muted); font-size:14px }
-
-  /* features grid */
-  .features{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
-  @media (max-width:720px){ .features{ grid-template-columns:repeat(1,1fr) } }
-
+  /* Features */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;}
+  @media (max-width:720px){.features{grid-template-columns:1fr;}}
   .feature{
-    background:var(--glass); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02);
+    background:var(--glass);
+    border-radius:12px;
+    padding:14px;
+    border:1px solid rgba(255,255,255,0.02);
+    transition:0.2s ease;
   }
-  .feature strong{ display:block; font-size:15px; margin-bottom:6px }
+  .feature:hover{background:rgba(108,122,255,0.05);}
+  .feature strong{display:block;margin-bottom:6px;font-size:15px;}
 
-  /* invite area */
-  .invite{
-    display:flex; flex-direction:column; gap:12px; align-items:stretch;
-  }
-  .invite .input{
-    background:transparent; border:1px dashed rgba(255,255,255,0.04); padding:10px 12px; border-radius:10px; color:var(--muted); font-size:14px;
-  }
+  /* Specs */
+  .specs{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+  .spec{background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:10px;color:var(--muted);font-size:13px;}
 
-  /* footer */
-  .footer{ margin-top:22px;text-align:center;color:var(--muted); font-size:13px }
-
-  /* subtle decorations */
-  .badge{ display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03); color:var(--muted); font-weight:600; font-size:13px}
-  .small{ font-size:13px; color:var(--muted) }
-
-  /* panel right */
-  .panel-right .card{ position:sticky; top:20px }
-  .specs{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px }
-  .spec{ background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:10px; font-size:13px; color:var(--muted) }
-
-  /* code sample */
-  pre { background:#071027; padding:12px;border-radius:10px; color:#bcd; font-size:13px; overflow:auto }
-
+  .footer{margin-top:32px;text-align:center;color:var(--muted);font-size:13px;}
+  .badge{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,0.03); font-weight:600;font-size:13px;}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="banner card">
-      <div class="title">
-        <div class="badge">NeonForge</div>
-        <h1>Adicione seu bot ao Discord</h1>
-        <p>Convide o bot para o seu servidor com um único clique — suporte a slash commands, permissões de admin e integração completa.</p>
-        <div class="hero-actions">
-          <!-- CLIENT ID já inserido -->
-          <a id="inviteBtn" class="btn" href="https://discord.com/oauth2/authorize?client_id=1444029890364965026&permissions=8&scope=bot%20applications.commands" target="_blank" rel="noopener">
-            ➕ Adicionar Bot
-          </a>
-          <a class="btn secondary" href="#" id="docsBtn">📘 Documentação</a>
-        </div>
-      </div>
-      <div style="margin-left:auto; text-align:right; z-index:2">
-        <img src="https://i.imgur.com/7bKJQ7L.png" alt="logo" style="width:120px;max-width:38%;opacity:0.98">
-        <div class="small" style="margin-top:10px;color:var(--muted)">Link pronto para GitHub Pages</div>
+<canvas id="particles"></canvas>
+<div class="wrap">
+  <div class="banner">
+    <div class="title">
+      <div class="badge">NeonForge</div>
+      <h1>Adicione seu bot ao Discord</h1>
+      <p>Convide o bot para o seu servidor com um clique — suporte a slash commands, IA, Anti-Raid e tickets integrados.</p>
+      <div class="hero-actions">
+        <a class="btn" href="https://discord.com/oauth2/authorize?client_id=1444029890364965026&permissions=8&scope=bot%20applications.commands" target="_blank">
+          ➕ Adicionar Bot
+        </a>
+        <a class="btn secondary" href="#">📘 Documentação</a>
       </div>
     </div>
-
-    <div class="panel">
-      <div>
-        <div class="card">
-          <h3>Visão rápida</h3>
-          <p class="small">Use esse painel para convidar o bot, ver instruções de instalação e acessar ferramentas úteis para rodar o bot no Termux.</p>
-
-          <div class="features" style="margin-top:14px">
-            <div class="feature">
-              <strong>/ia — Gerador automático</strong>
-              <span class="small">Crie servidores automaticamente a partir de uma frase.</span>
-            </div>
-            <div class="feature">
-              <strong>Anti-Raid</strong>
-              <span class="small">Canal oculto e proteções automáticas.</span>
-            </div>
-            <div class="feature">
-              <strong>Tickets</strong>
-              <span class="small">Sistema de tickets com botões e categorias.</span>
-            </div>
-          </div>
-
-          <hr style="border:none;height:1px;background:rgba(255,255,255,0.03);margin:16px 0">
-
-          <div style="display:flex;gap:12px;flex-wrap:wrap">
-            <div style="flex:1;min-width:200px">
-              <div class="small">Iniciar no Termux</div>
-              <pre>git clone https://github.com/SEU-USUARIO/neonforge-site
-cd neonforge-site
-python bot.py</pre>
-            </div>
-            <div style="width:190px">
-              <div class="small">Scripts</div>
-              <pre>./start.sh
-./stop.sh
-./restart.sh</pre>
-            </div>
-          </div>
-
-        </div>
-
-        <div style="height:18px"></div>
-
-        <div class="card">
-          <h3>Convite personalizado</h3>
-          <p class="small">Se quiser ajustar as permissões do link (ex.: sem Administrator), gere o URL pelo Developer Portal.</p>
-
-          <div style="margin-top:12px" class="invite">
-            <input class="input" id="clientIdInput" placeholder="Cole seu Client ID aqui (somente números)">
-            <a class="btn" id="generateBtn" href="#" onclick="generateInvite();return false;">Gerar link de Convite</a>
-            <div id="copyArea" style="display:none">
-              <input id="inviteLink" class="input" readonly>
-              <a class="btn secondary" id="copyBtn" href="#" onclick="copyInvite();return false;">Copiar link</a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="panel-right">
-        <div class="card">
-          <h3>Painel Moderno</h3>
-          <p class="small">Configurações rápidas e links úteis.</p>
-
-          <div class="specs" style="margin-top:12px">
-            <div class="spec">Slash Commands</div>
-            <div class="spec">IA Dinâmica</div>
-            <div class="spec">Anti-Raid</div>
-            <div class="spec">Tickets</div>
-            <div class="spec">Persistência JSON</div>
-          </div>
-
-          <div style="margin-top:16px">
-            <h3 style="margin-bottom:6px">Ações</h3>
-            <a class="btn" id="panelInvite" href="https://discord.com/oauth2/authorize?client_id=1444029890364965026&permissions=8&scope=bot%20applications.commands" target="_blank">Adicionar Bot</a>
-            <a class="btn secondary" id="githubBtn" href="#" style="margin-left:8px">Abrir repositório</a>
-          </div>
-
-          <div style="margin-top:16px">
-            <h3 style="margin-bottom:6px">Status</h3>
-            <div class="small">Use os scripts start/stop/restart para controlar o bot no Termux.</div>
-          </div>
-
-        </div>
-
-        <div style="height:14px"></div>
-
-        <div class="card">
-          <h3>Suporte & Links</h3>
-          <p class="small">Coloque aqui links para seu Discord de suporte, docs e repositório.</p>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
-            <a class="btn secondary" href="#" id="supportLink">Suporte (Discord)</a>
-            <a class="btn secondary" href="#" id="docsLink">Documentação</a>
-            <a class="btn secondary" href="#" id="repoLink">Repositório (GitHub)</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="footer">
-      <div class="small">© NeonForge • Site gerado automaticamente</div>
+    <div style="position:relative; z-index:2; text-align:right;">
+      <img src="https://i.imgur.com/7bKJQ7L.png" alt="logo" style="width:120px;max-width:38%;opacity:0.98">
     </div>
   </div>
 
+  <div class="panel">
+    <div>
+      <div class="card">
+        <h3>Visão Rápida</h3>
+        <p>Use o painel para convidar o bot e conhecer recursos rápidos e úteis.</p>
+        <div class="features">
+          <div class="feature">🤖 <strong>/ia — Gerador automático</strong><span class="small">Crie servidores automaticamente a partir de uma frase.</span></div>
+          <div class="feature">🛡️ <strong>Anti-Raid</strong><span class="small">Proteção automática e canais ocultos.</span></div>
+          <div class="feature">🎫 <strong>Tickets</strong><span class="small">Sistema de tickets com botões.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-right">
+      <div class="card">
+        <h3>Painel Moderno</h3>
+        <p>Configurações rápidas e links úteis.</p>
+        <div class="specs">
+          <div class="spec">⚡ Slash Commands</div>
+          <div class="spec">🧠 IA Dinâmica</div>
+          <div class="spec">🛡️ Anti-Raid</div>
+          <div class="spec">🎫 Tickets</div>
+          <div class="spec">💾 Persistência JSON</div>
+        </div>
+        <div style="margin-top:16px;">
+          <h3 style="margin-bottom:6px">Ações</h3>
+          <a class="btn" href="https://discord.com/oauth2/authorize?client_id=1444029890364965026&permissions=8&scope=bot%20applications.commands" target="_blank">Adicionar Bot</a>
+          <a class="btn secondary" href="#" style="margin-left:8px">Abrir repositório</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">© NeonForge </div>
+</div>
+
 <script>
-  function generateInvite(){
-    const id = document.getElementById('clientIdInput').value.trim();
-    if(!id || !/^[0-9]{16,}$/.test(id)){
-      alert('Cole seu Client ID válido (apenas números).');
-      return;
-    }
-    const link = `https://discord.com/oauth2/authorize?client_id=${encodeURIComponent(id)}&permissions=8&scope=bot%20applications.commands`;
-    document.getElementById('inviteLink').value = link;
-    document.getElementById('copyArea').style.display = 'block';
-    document.getElementById('inviteBtn').href = link;
-    document.getElementById('panelInvite').href = link;
-  }
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-  function copyInvite(){
-    const input = document.getElementById('inviteLink');
-    input.select();
-    input.setSelectionRange(0,99999);
-    document.execCommand('copy');
-    alert('Link copiado para a área de transferência!');
-  }
+let particles = [];
+const colors = ['#6c7aff','#22d3ee','#ffffff'];
 
-  document.getElementById('docsBtn').href = '#';
-  document.getElementById('githubBtn').href = '#';
-  document.getElementById('supportLink').href = '#';
-  document.getElementById('docsLink').href = '#';
-  document.getElementById('repoLink').href = '#';
+class Particle {
+  constructor(){
+    this.x = Math.random()*canvas.width;
+    this.y = Math.random()*canvas.height;
+    this.size = Math.random()*3+1;
+    this.speedX = (Math.random()-0.5)*0.5;
+    this.speedY = (Math.random()-0.5)*0.5;
+    this.color = colors[Math.floor(Math.random()*colors.length)];
+  }
+  update(){
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if(this.x<0) this.x=canvas.width;
+    if(this.x>canvas.width) this.x=0;
+    if(this.y<0) this.y=canvas.height;
+    if(this.y>canvas.height) this.y=0;
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+}
+
+function init(){
+  particles = [];
+  for(let i=0;i<120;i++){
+    particles.push(new Particle());
+  }
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animate);
+}
+window.addEventListener('resize',()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  init();
+});
+init();
+animate();
 </script>
 </body>
 </html>
