@@ -1,1 +1,284 @@
-<h1>Site NeonForge funcionando!</h1>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NeonForge • Adicionar Bot</title>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<style>
+  :root{
+    --bg:#0b1020;
+    --card:#0f1724;
+    --muted:#98a0b3;
+    --accent:#6c7aff;
+    --accent-2:#22d3ee;
+    --glass: rgba(255,255,255,0.04);
+    --radius:14px;
+    --maxw:1100px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 500px at 10% 10%, rgba(108,122,255,0.06), transparent 10%),
+      radial-gradient(900px 400px at 90% 90%, rgba(34,211,238,0.04), transparent 10%),
+      var(--bg);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+  }
+
+  .wrap{max-width:var(--maxw);margin:32px auto;padding:20px}
+
+  /* Banner */
+  .banner{
+    position:relative;
+    border-radius:18px;
+    overflow:hidden;
+    min-height:220px;
+    background: linear-gradient(90deg, rgba(108,122,255,0.08), rgba(34,211,238,0.04));
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:24px;
+    padding:28px;
+  }
+  .banner::after{
+    content:"";
+    position:absolute;right:-120px;top:-40px;width:420px;height:420px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.03), transparent 20%);
+    transform:rotate(12deg);
+    pointer-events:none;
+  }
+  .banner .title{
+    z-index:2;
+    max-width:64%;
+  }
+  .banner h1{
+    margin:0;font-size:34px;letter-spacing:-0.6px;
+  }
+  .banner p{
+    margin:10px 0 0;color:var(--muted);
+  }
+  .banner .hero-actions{ margin-top:12px; display:flex; gap:12px; align-items:center; }
+
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:linear-gradient(90deg,var(--accent),#5461ff 60%);
+    color:white;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:600;
+    box-shadow: 0 8px 30px rgba(75,85,255,0.12);
+    transition:transform .12s ease, box-shadow .12s;
+  }
+  .btn.secondary{
+    background:transparent;border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:600;
+    box-shadow:none;padding:10px 14px;
+  }
+  .btn:hover{ transform:translateY(-3px) }
+
+  /* panel */
+  .panel{
+    display:grid;
+    grid-template-columns: 1fr 380px;
+    gap:22px;margin-top:22px;
+  }
+  @media (max-width:980px){ .panel{ grid-template-columns: 1fr; } .banner .title{ max-width:100% } }
+
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius); padding:18px; box-shadow: 0 6px 20px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
+  }
+
+  .card h3{ margin:0 0 8px 0; font-size:18px }
+  .card p{ margin:0;color:var(--muted); font-size:14px }
+
+  /* features grid */
+  .features{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+  @media (max-width:720px){ .features{ grid-template-columns:repeat(1,1fr) } }
+
+  .feature{
+    background:var(--glass); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.02);
+  }
+  .feature strong{ display:block; font-size:15px; margin-bottom:6px }
+
+  /* invite area */
+  .invite{
+    display:flex; flex-direction:column; gap:12px; align-items:stretch;
+  }
+  .invite .input{
+    background:transparent; border:1px dashed rgba(255,255,255,0.04); padding:10px 12px; border-radius:10px; color:var(--muted); font-size:14px;
+  }
+
+  /* footer */
+  .footer{ margin-top:22px;text-align:center;color:var(--muted); font-size:13px }
+
+  /* subtle decorations */
+  .badge{ display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03); color:var(--muted); font-weight:600; font-size:13px}
+  .small{ font-size:13px; color:var(--muted) }
+
+  /* panel right */
+  .panel-right .card{ position:sticky; top:20px }
+  .specs{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px }
+  .spec{ background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:10px; font-size:13px; color:var(--muted) }
+
+  /* code sample */
+  pre { background:#071027; padding:12px;border-radius:10px; color:#bcd; font-size:13px; overflow:auto }
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="banner card">
+      <div class="title">
+        <div class="badge">NeonForge</div>
+        <h1>Adicione seu bot ao Discord</h1>
+        <p>Convide o bot para o seu servidor com um único clique — suporte a slash commands, permissões de admin e integração completa.</p>
+        <div class="hero-actions">
+          <!-- CLIENT ID já inserido -->
+          <a id="inviteBtn" class="btn" href="https://discord.com/oauth2/authorize?client_id=1444029890364965026&permissions=8&scope=bot%20applications.commands" target="_blank" rel="noopener">
+            ➕ Adicionar Bot
+          </a>
+          <a class="btn secondary" href="#" id="docsBtn">📘 Documentação</a>
+        </div>
+      </div>
+      <div style="margin-left:auto; text-align:right; z-index:2">
+        <img src="https://i.imgur.com/7bKJQ7L.png" alt="logo" style="width:120px;max-width:38%;opacity:0.98">
+        <div class="small" style="margin-top:10px;color:var(--muted)">Link pronto para GitHub Pages</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div>
+        <div class="card">
+          <h3>Visão rápida</h3>
+          <p class="small">Use esse painel para convidar o bot, ver instruções de instalação e acessar ferramentas úteis para rodar o bot no Termux.</p>
+
+          <div class="features" style="margin-top:14px">
+            <div class="feature">
+              <strong>/ia — Gerador automático</strong>
+              <span class="small">Crie servidores automaticamente a partir de uma frase.</span>
+            </div>
+            <div class="feature">
+              <strong>Anti-Raid</strong>
+              <span class="small">Canal oculto e proteções automáticas.</span>
+            </div>
+            <div class="feature">
+              <strong>Tickets</strong>
+              <span class="small">Sistema de tickets com botões e categorias.</span>
+            </div>
+          </div>
+
+          <hr style="border:none;height:1px;background:rgba(255,255,255,0.03);margin:16px 0">
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px">
+              <div class="small">Iniciar no Termux</div>
+              <pre>git clone https://github.com/SEU-USUARIO/neonforge-site
+cd neonforge-site
+python bot.py</pre>
+            </div>
+            <div style="width:190px">
+              <div class="small">Scripts</div>
+              <pre>./start.sh
+./stop.sh
+./restart.sh</pre>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="height:18px"></div>
+
+        <div class="card">
+          <h3>Convite personalizado</h3>
+          <p class="small">Se quiser ajustar as permissões do link (ex.: sem Administrator), gere o URL pelo Developer Portal.</p>
+
+          <div style="margin-top:12px" class="invite">
+            <input class="input" id="clientIdInput" placeholder="Cole seu Client ID aqui (somente números)">
+            <a class="btn" id="generateBtn" href="#" onclick="generateInvite();return false;">Gerar link de Convite</a>
+            <div id="copyArea" style="display:none">
+              <input id="inviteLink" class="input" readonly>
+              <a class="btn secondary" id="copyBtn" href="#" onclick="copyInvite();return false;">Copiar link</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel-right">
+        <div class="card">
+          <h3>Painel Moderno</h3>
+          <p class="small">Configurações rápidas e links úteis.</p>
+
+          <div class="specs" style="margin-top:12px">
+            <div class="spec">Slash Commands</div>
+            <div class="spec">IA Dinâmica</div>
+            <div class="spec">Anti-Raid</div>
+            <div class="spec">Tickets</div>
+            <div class="spec">Persistência JSON</div>
+          </div>
+
+          <div style="margin-top:16px">
+            <h3 style="margin-bottom:6px">Ações</h3>
+            <a class="btn" id="panelInvite" href="https://discord.com/oauth2/authorize?client_id=1444029890364965026&permissions=8&scope=bot%20applications.commands" target="_blank">Adicionar Bot</a>
+            <a class="btn secondary" id="githubBtn" href="#" style="margin-left:8px">Abrir repositório</a>
+          </div>
+
+          <div style="margin-top:16px">
+            <h3 style="margin-bottom:6px">Status</h3>
+            <div class="small">Use os scripts start/stop/restart para controlar o bot no Termux.</div>
+          </div>
+
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="card">
+          <h3>Suporte & Links</h3>
+          <p class="small">Coloque aqui links para seu Discord de suporte, docs e repositório.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+            <a class="btn secondary" href="#" id="supportLink">Suporte (Discord)</a>
+            <a class="btn secondary" href="#" id="docsLink">Documentação</a>
+            <a class="btn secondary" href="#" id="repoLink">Repositório (GitHub)</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="small">© NeonForge • Site gerado automaticamente</div>
+    </div>
+  </div>
+
+<script>
+  function generateInvite(){
+    const id = document.getElementById('clientIdInput').value.trim();
+    if(!id || !/^[0-9]{16,}$/.test(id)){
+      alert('Cole seu Client ID válido (apenas números).');
+      return;
+    }
+    const link = `https://discord.com/oauth2/authorize?client_id=${encodeURIComponent(id)}&permissions=8&scope=bot%20applications.commands`;
+    document.getElementById('inviteLink').value = link;
+    document.getElementById('copyArea').style.display = 'block';
+    document.getElementById('inviteBtn').href = link;
+    document.getElementById('panelInvite').href = link;
+  }
+
+  function copyInvite(){
+    const input = document.getElementById('inviteLink');
+    input.select();
+    input.setSelectionRange(0,99999);
+    document.execCommand('copy');
+    alert('Link copiado para a área de transferência!');
+  }
+
+  document.getElementById('docsBtn').href = '#';
+  document.getElementById('githubBtn').href = '#';
+  document.getElementById('supportLink').href = '#';
+  document.getElementById('docsLink').href = '#';
+  document.getElementById('repoLink').href = '#';
+</script>
+</body>
+</html>
